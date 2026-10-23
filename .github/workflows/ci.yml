@@ -26,7 +26,11 @@ jobs:
         run: python -m compileall -q app.py
         working-directory: compose-app
 
+      
       - name: Validar archivo Compose
         run: docker compose config -q
         working-directory: compose-app
+        env:
+          POSTGRES_PASSWORD: ci_test_password
+
 
