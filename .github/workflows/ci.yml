@@ -1,0 +1,32 @@
+
+name: CI - DevOps Lab
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: python -m pip install -r requirements.txt
+        working-directory: compose-app
+
+      - name: Verificar sintaxis de Python
+        run: python -m compileall -q app.py
+        working-directory: compose-app
+
+      - name: Validar archivo Compose
+        run: docker compose config -q
+        working-directory: compose-app
+
