@@ -9,6 +9,9 @@ jobs:
   validate:
     runs-on: ubuntu-latest
 
+    env:
+      POSTGRES_PASSWORD: ci_validation_only
+
     steps:
       - name: Descargar el repositorio
         uses: actions/checkout@v4
@@ -24,5 +27,27 @@ jobs:
       - name: Verificar sintaxis de Python
         run: python -m compileall -q app.py
 
-      - name: Validar archivo Compose
+      - name: Validar configuración Compose
         run: docker compose config -q
+
+      - name: Construir y levantar los servicios
+        run: docker compose up -d --build
+
+      - name: Probar endpoint de salud
+        run: |
+          for i in $(seq 1 20); do
+            if curl --fail --silent http://localhost:8000/health; then
+              echo "Health check correcto"
+              exit 0
+            fi
+            sleep 2
+          done
+
+          docker compose ps
+          docker compose logs
+          exit 1
+
+      - name: Detener los servicios
+        if: always()
+        run: docker compose down
+
