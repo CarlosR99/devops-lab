@@ -39,6 +39,6 @@ jobs:
 
       - name: Validate configuration
         run: terraform validate
-	
-      - name:Review Terraform plan
-        run: terrafom plan -input=false -no-color
+
+      - name: Review Terraform plan
+        run: terraform plan -input=false -no-color
