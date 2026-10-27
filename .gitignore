@@ -1,0 +1,15 @@
+# Respaldos de bases de datos
+/bakups/
+/backups/
+
+# Archivos de estado y datos locales de Terraform
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+**/crash.log
+**/crash.*.log
+**/*.tfvars
+**/*.tfvars.json
+
+# Archivos generados por el laboratorio
+terraform-lab/mensaje.txt
