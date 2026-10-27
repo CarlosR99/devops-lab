@@ -1,0 +1,41 @@
+name: Terraform CI
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "terraform-lab/**"
+      - ".github/workflows/terraform.yml"
+  pull_request:
+    branches:
+      - master
+    paths:
+      - "terraform-lab/**"
+      - ".github/workflows/terraform.yml"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Validate Terraform
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: terraform-lab
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Check formatting
+        run: terraform fmt -check -recursive
+
+      - name: Initialize Terraform
+        run: terraform init -backend=false
+
+      - name: Validate configuration
+        run: terraform validate
